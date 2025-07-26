@@ -1,58 +1,61 @@
+'use client';
+
+import Link from 'next/link';
+
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-lg">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Welcome Back
-        </h2>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+      <div className="flex w-full max-w-5xl bg-gray-100 items-center justify-between">
+        {/* Left Side - Brand Section */}
+        <div className="w-1/2 p-8">
+          <h1 className="text-5xl font-bold text-green-600">Apna Mandi</h1>
+          <p className="text-xl text-gray-700 mt-4 max-w-md">
+            Your daily mandi for fresh fruits & vegetables. Trusted by vendors. Delivered with care.
+          </p>
+        </div>
 
-        <form className="space-y-5">
-          {/* Email Input */}
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-600">
-              Email
-            </label>
+        {/* Right Side - Login Box */}
+        <div className="w-full max-w-sm bg-white rounded-xl shadow-lg p-8">
+          <form className="space-y-4">
             <input
               type="email"
-              id="email"
-              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="you@example.com"
+              placeholder="Email address or phone number"
+              className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
               required
             />
-          </div>
 
-          {/* Password Input */}
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-600">
-              Password
-            </label>
             <input
               type="password"
-              id="password"
-              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="••••••••"
+              placeholder="Password"
+              className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
               required
             />
-          </div>
 
-          {/* Login Button */}
-          <div>
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl transition duration-300"
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition"
             >
-              Login
+              Log in
             </button>
-          </div>
-        </form>
+          </form>
 
-        {/* Sign Up Link */}
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Don’t have an account?{' '}
-          <a href="/signup" className="text-blue-600 hover:underline font-medium">
-            Sign up
-          </a>
-        </p>
+          <div className="text-center mt-3">
+            <Link href="#" className="text-sm text-green-600 hover:underline">
+              Forgotten password?
+            </Link>
+          </div>
+
+          <hr className="my-5" />
+
+          <div className="text-center">
+            <Link
+              href="/signup"
+              className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Create new account
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
