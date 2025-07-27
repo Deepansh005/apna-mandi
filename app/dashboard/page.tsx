@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { createClient } from '@/utils/supabase/client';
 import { FiMapPin, FiSearch, FiShoppingCart, FiUser, FiX } from 'react-icons/fi';
 import { MdLanguage, MdMenu, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 
@@ -13,24 +15,90 @@ interface Product {
 }
 
 const products: Product[] = [
-  { id: 1, name: 'Tomatoes', price: 40, image: '/pexels-julia-nagy-568948-1327838.jpg' },
-  { id: 2, name: 'Onion', price: 30, image: '/onion-1430062_1280.jpg' },
-  { id: 3, name: 'Paneer', price: 120, image: '/cheese-630511_1280.jpg' },
-  { id: 4, name: 'Bell Peppers', price: 50, image: '/bell-peppers-499068_1280.jpg' },
-  { id: 5, name: 'Carrots', price: 25, image: '/pexels-chokniti-khongchum-1197604-2280550.jpg' },
-  { id: 6, name: 'Maida', price: 22, image: '/pexels-klaus-nielsen-6287581.jpg' },
-  { id: 7, name: 'Potatoes', price: 22, image: '/pexels-victorino-2286776.jpg' },
-  { id: 8, name: 'Red Pepper', price: 22, image: '/red-pepper-7247194_1280.jpg' },
-  { id: 9, name: 'Noodles', price: 22, image: '/noodles.jpg' },
+  {
+    id: 1,
+    name: 'Tomatoes',
+    price: 40,
+    image:'/pexels-julia-nagy-568948-1327838.jpg',
+  },
+  {
+    id: 2,
+    name: 'Onion',
+    price: 30,
+    image:
+      '/onion-1430062_1280.jpg',
+  },
+  {
+    id: 3,
+    name: 'Paneer',
+    price: 120,
+    image:
+      'cheese-630511_1280.jpg',
+  },
+  {
+    id: 4,
+    name: 'Bell Peppers',
+    price: 50,
+    image:
+      'bell-peppers-499068_1280.jpg',
+  },
+  {
+    id: 5,
+    name: 'Carrots',
+    price: 25,
+    image:
+      'pexels-chokniti-khongchum-1197604-2280550.jpg',
+  },
+  {
+    id: 6,
+    name: 'Maida',
+    price: 22,
+    image:
+      'pexels-klaus-nielsen-6287581.jpg',
+  },
+  {
+    id: 7,
+    name: 'Potatoes',
+    price: 22,
+    image:
+      'pexels-victorino-2286776.jpg',
+  },
+  {
+    id: 8,
+    name: 'Red Pepper',
+    price: 22,
+    image:
+      'red-pepper-7247194_1280.jpg',
+  },
+  {
+    id: 9,
+    name: 'Noodles',
+    price: 22,
+    image:
+      '/noodles.jpg',
+  },
 ];
 
-const languages = ['English', 'Hindi', 'Marathi', 'Telugu'];
-
-export default function ApnaMandiDashboard() {
+export default function ApnaMandiPage() {
   const [cart, setCart] = useState<Product[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [selectedLang, setSelectedLang] = useState('English');
+  const [products, setProducts] = useState<Product[]>([]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const supabase = createClient();
+      const { data, error } = await supabase.from('products').select<"*", Product>("*");
+
+      if (error) {
+        console.error('Error fetching products:', error);
+      } else if (data) {
+        setProducts(data);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const addToCart = (product: Product) => {
     setCart((prev) => [...prev, product]);
@@ -185,7 +253,7 @@ export default function ApnaMandiDashboard() {
             >
               <div className="flex-grow">
                 <Image
-                  src={product.image}
+                  src={`/${product.image}`}
                   alt={product.name}
                   width={300}
                   height={200}
