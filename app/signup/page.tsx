@@ -1,9 +1,13 @@
 'use client';
 
+// All necessary imports from both versions
 import Link from 'next/link';
 import { useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
+  // Keep your state management, it's correct
   const [showExtraForm, setShowExtraForm] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -12,30 +16,53 @@ export default function SignupPage() {
     password: '',
   });
 
+  const router = useRouter();
+  const supabase = createClient();
+
   const handleGoogleClick = () => {
-    // Simulate Google Auth flow here (e.g., Supabase / Firebase)
-    // Then ask user for additional required fields
-    setShowExtraForm(true);
+    // This can be implemented later
+    alert('Google Sign-in is not yet implemented.');
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleFinalSubmit = (e: React.FormEvent) => {
+  // Keep YOUR handleFinalSubmit function. It has the correct logic.
+  const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!formData.fullName || !formData.contact || !formData.password) {
       alert('Please fill all required fields');
       return;
     }
-    console.log('Form Submitted:', formData);
-    // Save to Supabase or database
+
+    // This is your correct Supabase logic for signing up a user with metadata
+    const { data, error } = await supabase.auth.signUp({
+      email: formData.contact,
+      password: formData.password,
+      options: {
+        data: {
+          full_name: formData.fullName,
+          business: formData.business,
+          contact: formData.contact,
+        },
+      },
+    });
+
+    if (error) {
+      alert('Signup failed: ' + error.message);
+      return;
+    }
+
+    alert('Success! Please check your email to confirm your account.');
+    router.push('/login');
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="flex w-full max-w-5xl bg-gray-100 items-center justify-between flex-col lg:flex-row">
-        {/* Left Side - Brand Tagline */}
+        {/* Left Side */}
         <div className="w-full lg:w-1/2 p-8 text-center lg:text-left">
           <h1 className="text-5xl font-bold text-green-600">Apna Mandi</h1>
           <p className="text-xl text-gray-700 mt-4 max-w-md mx-auto lg:mx-0">
@@ -43,11 +70,13 @@ export default function SignupPage() {
           </p>
         </div>
 
-        {/* Right Side - Signup Form */}
+        {/* Signup Form */}
         <div className="w-full max-w-sm bg-white rounded-xl shadow-lg p-8 mt-8 lg:mt-0">
+          {/* This logic for showing extra form fields is fine */}
           {!showExtraForm ? (
             <>
-              <form className="space-y-4">
+              <form onSubmit={handleFinalSubmit} className="space-y-4">
+                {/* USE AMAN'S STYLING for the inputs, but connect to YOUR state logic */}
                 <input
                   type="text"
                   placeholder="Full name"
@@ -59,8 +88,8 @@ export default function SignupPage() {
                 />
 
                 <input
-                  type="text"
-                  placeholder="Email address or Phone number"
+                  type="email"
+                  placeholder="Email address"
                   name="contact"
                   value={formData.contact}
                   onChange={handleInputChange}
@@ -89,7 +118,7 @@ export default function SignupPage() {
 
                 <button
                   type="submit"
-                  className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg"
                 >
                   Sign up
                 </button>
@@ -100,74 +129,25 @@ export default function SignupPage() {
               <div className="text-center space-y-3">
                 <button
                   onClick={handleGoogleClick}
-                  className="w-full border border-green-600 text-green-600 font-semibold py-2 rounded-lg hover:bg-green-50 transition"
+                  className="w-full border border-green-600 text-green-600 font-semibold py-2 rounded-lg hover:bg-green-50"
                 >
                   Continue with Google
                 </button>
 
                 <p className="text-sm">
                   <span className="text-gray-600 font-medium">Already have an account?</span>{' '}
-                  <Link
-                    href="/login"
-                    className="text-green-600 font-semibold hover:underline"
-                  >
+                  <Link href="/login" className="text-green-600 font-semibold hover:underline">
                     Log in
                   </Link>
                 </p>
               </div>
             </>
           ) : (
-            // Extra fields shown after Google auth
             <form onSubmit={handleFinalSubmit} className="space-y-4">
               <h2 className="text-xl font-semibold text-center text-green-700">
                 Complete Your Profile
               </h2>
-
-              <input
-                type="text"
-                name="fullName"
-                placeholder="Full name"
-                value={formData.fullName}
-                onChange={handleInputChange}
-                required
-                className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
-              />
-
-              <input
-                type="text"
-                name="contact"
-                placeholder="Email address or Phone number"
-                value={formData.contact}
-                onChange={handleInputChange}
-                required
-                className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
-              />
-
-              <input
-                type="text"
-                name="business"
-                placeholder="Business name (optional)"
-                value={formData.business}
-                onChange={handleInputChange}
-                className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
-              />
-
-              <input
-                type="password"
-                name="password"
-                placeholder="Create password"
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-                className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
-              />
-
-              <button
-                type="submit"
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition"
-              >
-                Complete Signup
-              </button>
+              {/* This part of the form can be built out later */}
             </form>
           )}
         </div>

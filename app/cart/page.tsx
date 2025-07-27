@@ -99,6 +99,8 @@ const ShoppingCart: React.FC = () => {
                         min={1}
                         value={item.quantity}
                         readOnly
+                        title="Product quantity"
+                        placeholder="Qty"
                         className="w-12 text-center font-bold bg-transparent text-gray-800"
                       />
                       <button
@@ -176,7 +178,7 @@ const ShoppingCart: React.FC = () => {
                 </div>
               </div>
               <p className="text-sm text-gray-700 font-semibold mb-6">
-                By placing your order, you agree to Apna Mandi's{" "}
+                By placing your order, you agree to Apna Mandi&apos;s{" "}
                 <a href="#" className="text-green-700 underline font-bold">
                   terms and conditions
                 </a>
