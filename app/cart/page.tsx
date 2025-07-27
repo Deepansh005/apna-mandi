@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from 'next/image';
 
 const products = [
   {
@@ -64,9 +65,11 @@ const ShoppingCart: React.FC = () => {
                 key={item.id}
                 className="flex items-center gap-4 mb-6 border-b pb-4"
               >
-                <img
-                  src={item.image}
+                <Image
+                  src={item.image.startsWith("/") ? item.image : `/${item.image}`}
                   alt={item.title}
+                  width={112}
+                  height={112}
                   className="w-28 h-28 object-cover rounded-xl border"
                 />
                 <div className="flex-grow">
