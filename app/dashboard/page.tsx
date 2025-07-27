@@ -16,15 +16,14 @@ const products: Product[] = [
     id: 1,
     name: 'Tomatoes',
     price: 40,
-    image:
-      'pexels-julia-nagy-568948-1327838.jpg',
+    image:'/pexels-julia-nagy-568948-1327838.jpg',
   },
   {
     id: 2,
     name: 'Onion',
     price: 30,
     image:
-      'onion-1430062_1280.jpg',
+      '/onion-1430062_1280.jpg',
   },
   {
     id: 3,
@@ -73,7 +72,7 @@ const products: Product[] = [
     name: 'Noodles',
     price: 22,
     image:
-      'prod-20210605-1807125173259390376902601.jpg',
+      '/noodles.jpg',
   },
 ];
 
@@ -105,26 +104,31 @@ export default function ApnaMandiPage() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((product) => (
             <div
-              key={product.id}
-              className="bg-white p-4 rounded-xl shadow hover:shadow-xl transform hover:scale-105 transition-all"
-            >
-              <img
-                src={product.image}
-                alt={product.name}
-                width={300}
-                height={200}
-                className="rounded-md mb-3 object-cover"
-                
-              />
-              <h2 className="font-semibold text-lg">{product.name}</h2>
-              <p className="text-green-700 font-medium">₹{product.price} /kg</p>
-              <button
-                onClick={() => addToCart(product)}
-                className="mt-3 bg-green-600 hover:bg-green-700 text-white w-full py-2 rounded-lg transition"
-              >
-                Add to Cart
-              </button>
-            </div>
+key={product.id}
+  // 👇 1. Make the card a vertical flex container
+  className="flex flex-col bg-white p-4 rounded-xl shadow hover:shadow-xl transform hover:scale-105 transition-all"
+>
+  {/* 👇 2. Wrap content in a div that can grow */}
+  <div className="flex-grow">
+    <img
+      src={product.image}
+      alt={product.name}
+      width={300}
+      height={200}
+      className="rounded-md mb-3 h-[200px] object-cover"
+    />
+    <h2 className="font-semibold text-lg">{product.name}</h2>
+    <p className="text-gray-700 font-medium">₹{product.price} /kg</p>
+  </div>
+
+  {/* This button will now be pushed to the bottom */}
+  <button
+    onClick={() => addToCart(product)}
+    className="mt-3 bg-green-600 hover:bg-green-700 text-white w-full py-2 rounded-lg transition"
+  >
+    Add to Cart
+  </button>
+</div>
           ))}
         </div>
       </div>
