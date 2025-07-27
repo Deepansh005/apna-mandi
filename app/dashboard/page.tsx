@@ -84,6 +84,7 @@ export default function ApnaMandiPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [selectedLang, setSelectedLang] = useState('English');
+  const languageOptions = ['English', 'Hindi', 'Punjabi', 'Bengali'];
   const [products, setProducts] = useState<Product[]>([]);
   useEffect(() => {
     const fetchProducts = async () => {
@@ -139,29 +140,29 @@ export default function ApnaMandiPage() {
         {/* Right */}
         <div className="flex items-center gap-4 text-sm relative">
           {/* Language Selector */}
-          <div className="relative cursor-pointer">
-            <div className="flex items-center gap-1" onClick={() => setLangDropdownOpen(!langDropdownOpen)}>
-              <MdLanguage className="text-xl" />
-              <span>{selectedLang.slice(0, 2).toUpperCase()}</span>
-              {langDropdownOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
-            </div>
-            {langDropdownOpen && (
-              <div className="absolute bg-white text-black top-8 right-0 rounded shadow z-50">
-                {languages.map((lang) => (
-                  <div
-                    key={lang}
-                    onClick={() => {
-                      setSelectedLang(lang);
-                      setLangDropdownOpen(false);
-                    }}
-                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    {lang}
-                  </div>
-                ))}
-              </div>
-            )}
+        <div className="relative cursor-pointer">
+          <div className="flex items-center gap-1" onClick={() => setLangDropdownOpen(!langDropdownOpen)}>
+            <MdLanguage className="text-xl" />
+            <span>{selectedLang.slice(0, 2).toUpperCase()}</span>
+            {langDropdownOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
           </div>
+          {langDropdownOpen && (
+            <div className="absolute bg-white text-black top-8 right-0 rounded shadow z-50">
+              {languageOptions.map((lang: string) => (
+                <div
+                  key={lang}
+                  onClick={() => {
+                    setSelectedLang(lang);
+                    setLangDropdownOpen(false);
+                  }}
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                >
+                  {lang}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
           <div className="hover:underline cursor-pointer">
             <div>Hello, Sign in</div>
