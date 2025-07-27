@@ -55,7 +55,7 @@ export default function SignupPage() {
                   value={formData.fullName}
                   onChange={handleInputChange}
                   required
-                  className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
+                  className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 text-black focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
                 />
 
                 <input
@@ -65,7 +65,7 @@ export default function SignupPage() {
                   value={formData.contact}
                   onChange={handleInputChange}
                   required
-                  className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
+                  className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 text-black focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
                 />
 
                 <input
@@ -74,7 +74,7 @@ export default function SignupPage() {
                   name="business"
                   value={formData.business}
                   onChange={handleInputChange}
-                  className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
+                  className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 text-black focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
                 />
 
                 <input
@@ -84,7 +84,7 @@ export default function SignupPage() {
                   value={formData.password}
                   onChange={handleInputChange}
                   required
-                  className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
+                  className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 text-black focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
                 />
 
                 <button
