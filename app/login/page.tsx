@@ -1,16 +1,30 @@
 'use client';
 
+// Imports from both versions, cleaned up
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+  // State from your branch for the core logic
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
+  // Hooks from Aman's branch for UI enhancements
+  const [touched, setTouched] = useState(false);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+
+  // Hooks from your branch for functionality
   const router = useRouter();
   const supabase = createClient();
 
+  // Keep Aman's useEffect to auto-focus the input field
+  useEffect(() => {
+    emailInputRef.current?.focus();
+  }, []);
+
+  // Keep YOUR handleLogin function - it has the correct Supabase logic
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -35,38 +49,61 @@ export default function LoginPage() {
   };
 
   return (
+    // Keep Aman's overall layout structure
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="flex w-full max-w-5xl bg-gray-100 items-center justify-between flex-col lg:flex-row">
-        {/* Left Side */}
-        <div className="w-full lg:w-1/2 p-8 text-center lg:text-left">
+      <div className="flex w-full max-w-5xl bg-gray-100 items-center justify-between rounded-xl overflow-hidden">
+        
+        {/* Keep Aman's styled "Left Side" */}
+        <div className="w-1/2 p-10">
           <h1 className="text-5xl font-bold text-green-600">Apna Mandi</h1>
-          <p className="text-xl text-gray-700 mt-4 max-w-md mx-auto lg:mx-0">
+          <p className="text-xl text-gray-700 mt-4 max-w-md leading-relaxed">
             Your daily mandi for fresh fruits & vegetables. Trusted by vendors. Delivered with care.
           </p>
         </div>
 
-        {/* Login Form */}
-        <div className="w-full max-w-sm bg-white rounded-xl shadow-lg p-8 mt-8 lg:mt-0">
-          <form onSubmit={handleLogin} className="space-y-4">
-            <h2 className="text-2xl font-bold text-center mb-6">Log in to your account</h2>
-            <input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full border border-gray-300 px-4 py-3 rounded-lg"
-            />
+        {/* Keep Aman's styled "Right Side" form container */}
+        <div className="w-full max-w-sm bg-white p-8 rounded-xl shadow-xl">
+          {/* Change onSubmit to use YOUR handleLogin function */}
+          <form onSubmit={handleLogin} className="space-y-5">
 
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full border border-gray-300 px-4 py-3 rounded-lg"
-            />
+            {/* Email Input: Use Aman's styling but connect to YOUR state */}
+            <div>
+              <input
+                ref={emailInputRef}
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onBlur={() => setTouched(true)} // Keep Aman's validation trigger
+                required
+                className={`w-full px-4 py-3 rounded-lg placeholder-gray-500 border text-black transition duration-200
+                  ${email ? 'border-green-500' : 'border-gray-300'}
+                  focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1 focus:shadow-lg`}
+              />
+              {!email && touched && (
+                <p className="text-sm text-red-600 mt-1">This field is required.</p>
+              )}
+            </div>
 
+            {/* Password Input: Use Aman's styling but connect to YOUR state */}
+            <div>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onBlur={() => setTouched(true)} // Keep Aman's validation trigger
+                required
+                className={`w-full px-4 py-3 rounded-lg placeholder-gray-500 border text-black transition duration-200
+                  ${password ? 'border-green-500' : 'border-gray-300'}
+                  focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1 focus:shadow-lg`}
+              />
+              {!password && touched && (
+                <p className="text-sm text-red-600 mt-1">Password is required.</p>
+              )}
+            </div>
+
+            {/* Submit Button */}
             <button
               type="submit"
               className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg"
@@ -75,21 +112,26 @@ export default function LoginPage() {
             </button>
           </form>
 
+          {/* Forgot Password */}
           <div className="text-center mt-4">
-            <Link href="/forgot-password">
-              <span className="text-sm text-green-600 hover:underline">Forgot password?</span>
+            {/* Use your link to the correct page */}
+            <Link href="/forgot-password" className="text-sm text-green-600 hover:underline">
+              Forgot password?
             </Link>
           </div>
 
-          <hr className="my-5" />
+          {/* Divider */}
+          <hr className="my-6" />
 
+          {/* Create Account */}
           <div className="text-center">
-            <p className="text-sm">
-              <span className="text-gray-600 font-medium">don&#39;t have an account?</span>{' '}
-              <Link href="/signup" className="text-green-600 font-semibold hover:underline">
-                Sign up
-              </Link>
-            </p>
+            {/* Use Aman's styled button but your link */}
+            <Link
+              href="/signup"
+              className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-5 rounded-lg transition"
+            >
+              Create new account
+            </Link>
           </div>
         </div>
       </div>

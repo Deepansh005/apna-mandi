@@ -1,11 +1,13 @@
 'use client';
 
+// All necessary imports from both versions
 import Link from 'next/link';
 import { useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
+  // Keep your state management, it's correct
   const [showExtraForm, setShowExtraForm] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -18,44 +20,45 @@ export default function SignupPage() {
   const supabase = createClient();
 
   const handleGoogleClick = () => {
-    setShowExtraForm(true);
+    // This can be implemented later
+    alert('Google Sign-in is not yet implemented.');
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ Handle form submit and save to Supabase
+  // Keep YOUR handleFinalSubmit function. It has the correct logic.
   const handleFinalSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!formData.fullName || !formData.contact || !formData.password) {
-    alert('Please fill all required fields');
-    return;
-  }
+    if (!formData.fullName || !formData.contact || !formData.password) {
+      alert('Please fill all required fields');
+      return;
+    }
 
-  // 1. Create user in Supabase Auth, passing metadata
-  const { data, error } = await supabase.auth.signUp({
-    email: formData.contact,
-    password: formData.password,
-    options: {
-      data: {
-        full_name: formData.fullName,
-        business: formData.business,
-        contact: formData.contact,
+    // This is your correct Supabase logic for signing up a user with metadata
+    const { data, error } = await supabase.auth.signUp({
+      email: formData.contact,
+      password: formData.password,
+      options: {
+        data: {
+          full_name: formData.fullName,
+          business: formData.business,
+          contact: formData.contact,
+        },
       },
-    },
-  });
+    });
 
-  if (error) {
-    alert('Signup failed: ' + error.message);
-    return;
-  }
+    if (error) {
+      alert('Signup failed: ' + error.message);
+      return;
+    }
 
-  // 2. Redirect to login page after successful signup
-  alert('Success! Please check your email to confirm your account.');
-  router.push('/login');
-};
+    alert('Success! Please check your email to confirm your account.');
+    router.push('/login');
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="flex w-full max-w-5xl bg-gray-100 items-center justify-between flex-col lg:flex-row">
@@ -69,9 +72,11 @@ export default function SignupPage() {
 
         {/* Signup Form */}
         <div className="w-full max-w-sm bg-white rounded-xl shadow-lg p-8 mt-8 lg:mt-0">
+          {/* This logic for showing extra form fields is fine */}
           {!showExtraForm ? (
             <>
               <form onSubmit={handleFinalSubmit} className="space-y-4">
+                {/* USE AMAN'S STYLING for the inputs, but connect to YOUR state logic */}
                 <input
                   type="text"
                   placeholder="Full name"
@@ -79,7 +84,7 @@ export default function SignupPage() {
                   value={formData.fullName}
                   onChange={handleInputChange}
                   required
-                  className="w-full border border-gray-300 px-4 py-3 rounded-lg"
+                  className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 text-black focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
                 />
 
                 <input
@@ -89,7 +94,7 @@ export default function SignupPage() {
                   value={formData.contact}
                   onChange={handleInputChange}
                   required
-                  className="w-full border border-gray-300 px-4 py-3 rounded-lg"
+                  className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 text-black focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
                 />
 
                 <input
@@ -98,7 +103,7 @@ export default function SignupPage() {
                   name="business"
                   value={formData.business}
                   onChange={handleInputChange}
-                  className="w-full border border-gray-300 px-4 py-3 rounded-lg"
+                  className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 text-black focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
                 />
 
                 <input
@@ -108,7 +113,7 @@ export default function SignupPage() {
                   value={formData.password}
                   onChange={handleInputChange}
                   required
-                  className="w-full border border-gray-300 px-4 py-3 rounded-lg"
+                  className="w-full border border-gray-300 px-4 py-3 rounded-lg placeholder-gray-500 text-black focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-600"
                 />
 
                 <button
@@ -142,7 +147,7 @@ export default function SignupPage() {
               <h2 className="text-xl font-semibold text-center text-green-700">
                 Complete Your Profile
               </h2>
-              {/* Same fields as above */}
+              {/* This part of the form can be built out later */}
             </form>
           )}
         </div>
