@@ -84,7 +84,7 @@ export default function ApnaMandiPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [selectedLang, setSelectedLang] = useState('English');
-  const languageOptions = ['English', 'Hindi', 'Punjabi', 'Bengali'];
+  const languageOptions = ['English', 'Hindi', 'Marathi', 'Tamil', 'Bengali'];
   const [products, setProducts] = useState<Product[]>([]);
   useEffect(() => {
     const fetchProducts = async () => {
@@ -106,9 +106,9 @@ export default function ApnaMandiPage() {
   };
 
   return (
-    <div className={`bg-gray-100 min-h-screen ${sidebarOpen ? 'overflow-hidden' : ''}`}>
+    <div className={`bg-slate-50 min-h-screen ${sidebarOpen ? 'overflow-hidden' : ''}`}>
       {/* Navbar */}
-      <nav className="bg-[#232f3e] text-white px-4 md:px-8 py-3 flex items-center justify-between sticky top-0 z-50">
+      <nav className="bg-emerald-800 text-white px-4 md:px-8 py-3 flex items-center justify-between sticky top-0 z-50">
         {/* Left Side */}
         <div className="flex items-center gap-4">
           <button onClick={() => setSidebarOpen(true)} className="text-white">
@@ -202,13 +202,13 @@ export default function ApnaMandiPage() {
         <div className="p-4 space-y-4 text-sm">
           <div>
             <h3 className="font-bold text-gray-700 mb-2">Fresh Picks</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 text-gray-800 font-semi-bold">
               <li className="flex items-center space-x-2">
-                <Image src="/vegetables.jpg" alt="Vegetables" width={24} height={24} />
+                {/* <Image src="/vegetables.jpg" alt="Vegetables" width={24} height={24} /> */}
                 <span>Vegetables</span>
               </li>
               <li className="flex items-center space-x-2">
-                <Image src="/fruits.jpg" alt="Fruits" width={24} height={24} />
+                {/* <Image src="/fruits.jpg" alt="Fruits" width={24} height={24} /> */}
                 <span>Fruits</span>
               </li>
               <li>Organic Produce</li>
@@ -217,7 +217,7 @@ export default function ApnaMandiPage() {
 
           <div>
             <h3 className="font-bold text-gray-700 mb-2">Bulk Buying</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 text-gray-800 font-semi-bold">
               <li>Vendor Orders</li>
               <li>Subscription Plans</li>
               <li>Monthly Combos</li>
@@ -226,7 +226,7 @@ export default function ApnaMandiPage() {
 
           <div>
             <h3 className="font-semibold text-gray-700 mb-2">Help & Info</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 text-gray-800 font-semi-bold">
               <li>Track Orders</li>
               <li>Customer Service</li>
               <li>Explore Plans</li>
@@ -260,7 +260,7 @@ export default function ApnaMandiPage() {
                   height={200}
                   className="rounded-md mb-3 h-[200px] object-cover"
                 />
-                <h2 className="font-semibold text-lg">{product.name}</h2>
+                <h2 className="text-xl font-bold mb-1 text-gray-800">{product.name}</h2>
                 <p className="text-gray-700 font-medium">₹{product.price} /kg</p>
               </div>
               <button
