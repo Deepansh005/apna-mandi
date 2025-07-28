@@ -1,23 +1,22 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
 import { Poppins } from 'next/font/google';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useCart, Product } from '../context/CartContext';
 
 // Consistent Icons from the other pages
-import { 
-    FiSearch, 
-    FiShoppingCart, 
-    FiUser, 
-    FiX, 
-    FiZap, 
-    FiMenu, 
-    FiLogOut, 
-    FiHome, 
-    FiBox, 
+import {
+    FiSearch,
+    FiShoppingCart,
+    FiUser,
+    FiX,
+    FiZap,
+    FiMenu,
+    FiLogOut,
+    FiHome,
     FiTag,
     FiSettings,
     FiHelpCircle
@@ -30,19 +29,14 @@ const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700', '800'],
 });
 
-// Interface for Product data
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  unit?: string;
+// Interface for extended product data (for dashboard display only)
+interface DashboardProduct extends Product {
   rating?: number;
   reviewCount?: number;
   tag?: 'Best Seller' | 'Organic' | 'New';
 }
 
-// Reusable Star Rating Component - Enhanced Styling
+// Reusable Star Rating Component
 const StarRating = ({ rating = 0, reviewCount = 0 }: { rating?: number; reviewCount?: number }) => {
   const totalStars = 5;
   const fullStars = Math.floor(rating);
@@ -61,34 +55,17 @@ const StarRating = ({ rating = 0, reviewCount = 0 }: { rating?: number; reviewCo
   );
 };
 
-// Interface for Notification component props
-interface NotificationProps {
-  message: string;
-  onDismiss: () => void;
-}
-
-// Notification component consistent with login/signup pages
-const Notification: React.FC<NotificationProps> = ({ message, onDismiss }) => {
+// Notification component
+const Notification: React.FC<{ message: string; onDismiss: () => void; }> = ({ message, onDismiss }) => {
     if (!message) return null;
-
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
-        // This effect sets a timer to automatically dismiss the notification.
         const timer = setTimeout(onDismiss, 3000);
-        
-        // The cleanup function clears the timer if the component unmounts
-        // or if the effect re-runs before the timer finishes.
         return () => clearTimeout(timer);
-
-    // The 'onDismiss' function is added here to satisfy the react-hooks/exhaustive-deps
-    // linting rule. This ensures the effect has all its dependencies listed.
-    // For optimal performance, the onDismiss function passed from the parent component
-    // should be wrapped in a `useCallback` hook to prevent this effect from
-    // re-running unnecessarily on every parent render.
     }, [onDismiss]);
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
@@ -100,14 +77,15 @@ const Notification: React.FC<NotificationProps> = ({ message, onDismiss }) => {
 };
 
 export default function ApnaMandiDashboard() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [cart, setCart] = useState<Product[]>([]);
+  const [products, setProducts] = useState<DashboardProduct[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [notification, setNotification] = useState('');
 
-  // Fetch products and set initial sidebar state
+  // --- USE GLOBAL CART CONTEXT ---
+  const { addToCart, cartCount } = useCart();
+
   useEffect(() => {
-    if (window.innerWidth < 768) {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
       setSidebarOpen(false);
     }
     const fetchProducts = async () => {
@@ -117,8 +95,8 @@ export default function ApnaMandiDashboard() {
       if (error) {
         console.error('Error fetching products:', error);
       } else if (data) {
-        const tags: Product['tag'][] = ['Best Seller', 'Organic', 'New'];
-        const productsWithEnhancements = data.map((product, index) => ({
+        const tags: DashboardProduct['tag'][] = ['Best Seller', 'Organic', 'New'];
+        const productsWithEnhancements: DashboardProduct[] = data.map((product, index) => ({
           ...product,
           rating: parseFloat((Math.random() * (5 - 3.8) + 3.8).toFixed(1)),
           reviewCount: Math.floor(Math.random() * 300) + 20,
@@ -130,12 +108,12 @@ export default function ApnaMandiDashboard() {
     fetchProducts();
   }, []);
 
-  const addToCart = (product: Product) => {
-    setCart((prev) => [...prev, product]);
+  const handleAddToCart = (product: Product) => {
+    addToCart(product); // Use context's addToCart
     setNotification(`${product.name} added to cart!`);
   };
 
-  const deals = products.slice(0, 4); // Show 4 deals for better grid layout
+  const deals = products.slice(0, 4);
   const allProducts = products.slice(4);
 
   return (
@@ -143,7 +121,7 @@ export default function ApnaMandiDashboard() {
       <AnimatePresence>
           {notification && <Notification message={notification} onDismiss={() => setNotification('')} />}
       </AnimatePresence>
-      
+
       {/* --- SIDEBAR --- */}
       <aside className={`absolute md:relative z-30 bg-gray-800/50 backdrop-blur-lg transition-all duration-300 ease-in-out h-full flex flex-col ${sidebarOpen ? 'w-64' : 'w-0'} overflow-hidden`}>
           <div className="flex items-center justify-between p-4 border-b border-gray-700 flex-shrink-0">
@@ -157,12 +135,10 @@ export default function ApnaMandiDashboard() {
           </div>
           <nav className="p-4 space-y-2 flex-grow overflow-y-auto">
               <h3 className="font-bold text-yellow-400 mb-2 px-3 text-sm uppercase tracking-wider">Menu</h3>
-              <Link href="#" className="flex items-center gap-3 py-2 px-3 rounded-lg bg-green-500/20 text-white font-semibold transition-colors"><FiHome /> Dashboard</Link>
-              <Link href="#" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-700 transition-colors"><FiBox /> My Orders</Link>
+              <Link href="/dashboard" className="flex items-center gap-3 py-2 px-3 rounded-lg bg-green-500/20 text-white font-semibold transition-colors"><FiHome /> Dashboard</Link>
+              <Link href="/cart" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-700 transition-colors"><FiShoppingCart /> My Cart</Link>
               <Link href="#" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-700 transition-colors"><FiTag /> Deals</Link>
-              
               <hr className="my-4 border-gray-700"/>
-              
               <h3 className="font-bold text-yellow-400 mb-2 px-3 text-sm uppercase tracking-wider">Account</h3>
               <Link href="/account" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-700 transition-colors"><FiUser /> Profile</Link>
               <Link href="/settings" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-700 transition-colors"><FiSettings /> Settings</Link>
@@ -190,9 +166,9 @@ export default function ApnaMandiDashboard() {
                 <Link href="/cart" className="relative p-2 rounded-full hover:bg-gray-700 transition-colors">
                     <FiShoppingCart size={22} />
                     <AnimatePresence>
-                        {cart.length > 0 && (
-                            <motion.span key={cart.length} initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={{ type: 'spring', stiffness: 500, damping: 20 }} className="absolute -top-1 -right-1 text-xs bg-red-500 rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                                {cart.length}
+                        {cartCount > 0 && (
+                            <motion.span key={cartCount} initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={{ type: 'spring', stiffness: 500, damping: 20 }} className="absolute -top-1 -right-1 text-xs bg-red-500 rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                                {cartCount}
                             </motion.span>
                         )}
                     </AnimatePresence>
@@ -212,7 +188,7 @@ export default function ApnaMandiDashboard() {
                 <p className="text-gray-400 mb-6">Fresh picks at prices you&apos;ll love. Grab them before they&apos;re gone!</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {deals.map((product) => (
-                        <motion.div key={product.id} whileHover={{ y: -5, scale: 1.03 }} className="flex flex-col bg-gray-800/50 rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all group border border-gray-700 hover:border-yellow-400/50">
+                        <motion.div key={product.id} whileHover={{ y: -5, scale: 1.03 }} className="flex flex-col bg-gray-800/50 rounded-2xl shadow-lg overflow-hidden transition-all group border border-gray-700 hover:border-yellow-400/50">
                             <div className="relative">
                                 <img src={`/${product.image}`} alt={product.name} width={400} height={300} className="h-48 w-full object-cover"/>
                                 {product.tag && <div className="absolute top-3 right-3 bg-yellow-400 text-gray-900 text-xs font-bold px-3 py-1 rounded-full">{product.tag}</div>}
@@ -222,7 +198,7 @@ export default function ApnaMandiDashboard() {
                             <div className="p-4 flex flex-col flex-grow">
                                 <StarRating rating={product.rating} reviewCount={product.reviewCount} />
                                 <p className="text-white text-2xl font-bold my-3">₹{product.price}<span className="text-base font-normal text-gray-400"> / {product.unit || 'kg'}</span></p>
-                                <button onClick={() => addToCart(product)} className="mt-auto bg-gradient-to-r from-yellow-500 to-green-600 text-white font-bold w-full py-2.5 rounded-lg group-hover:from-yellow-400 group-hover:to-green-500 transition-all duration-300 hover:scale-105">Add to Cart</button>
+                                <button onClick={() => handleAddToCart(product)} className="mt-auto bg-gradient-to-r from-yellow-500 to-green-600 text-white font-bold w-full py-2.5 rounded-lg group-hover:from-yellow-400 group-hover:to-green-500 transition-all duration-300 hover:scale-105">Add to Cart</button>
                             </div>
                         </motion.div>
                     ))}
@@ -245,7 +221,7 @@ export default function ApnaMandiDashboard() {
                                     <p className="text-xl font-bold text-white">₹{product.price}</p>
                                     <p className="text-gray-400 text-sm">/ {product.unit || 'kg'}</p>
                                 </div>
-                                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => addToCart(product)} className="bg-green-900/50 border border-green-500 text-green-400 font-semibold w-full py-2 px-4 rounded-lg hover:bg-green-500 hover:text-white transition-colors">Add to Cart</motion.button>
+                                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => handleAddToCart(product)} className="bg-green-900/50 border border-green-500 text-green-400 font-semibold w-full py-2 px-4 rounded-lg hover:bg-green-500 hover:text-white transition-colors">Add to Cart</motion.button>
                             </div>
                         </motion.div>
                     ))}
