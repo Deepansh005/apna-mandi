@@ -137,7 +137,8 @@ export default function ApnaMandiDashboard() {
               <h3 className="font-bold text-yellow-400 mb-2 px-3 text-sm uppercase tracking-wider">Menu</h3>
               <Link href="/dashboard" className="flex items-center gap-3 py-2 px-3 rounded-lg bg-green-500/20 text-white font-semibold transition-colors"><FiHome /> Dashboard</Link>
               <Link href="/cart" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-700 transition-colors"><FiShoppingCart /> My Cart</Link>
-              <Link href="#" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-700 transition-colors"><FiTag /> Deals</Link>
+              {/* --- THIS LINK IS NOW UPDATED --- */}
+              <Link href="/plans" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-700 transition-colors"><FiTag /> Deals & Plans</Link>
               <hr className="my-4 border-gray-700"/>
               <h3 className="font-bold text-yellow-400 mb-2 px-3 text-sm uppercase tracking-wider">Account</h3>
               <Link href="/account" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-700 transition-colors"><FiUser /> Profile</Link>
