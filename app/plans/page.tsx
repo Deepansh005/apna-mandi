@@ -8,11 +8,23 @@ const SubscriptionPlans = () => {
       name: 'Basic',
       emoji: '🟢',
       price: 'FREE',
-      bg: 'bg-green-100 border-green-00',
+      bg: 'bg-green-100 border-green-300',
       features: [
         'Order any time',
         'Real-time delivery updates',
         'Manual payment per delivery'
+      ],
+      cta: 'Start Ordering'
+    },
+    {
+      name: 'Pro',
+      emoji: '🟡',
+      price: '₹299 / month',
+      bg: 'bg-yellow-100 border-yellow-300',
+      features: [
+        'Priority delivery slot',
+        'Early-morning delivery (before 9 AM)',
+        'Monthly savings dashboard'
       ],
       cta: 'Upgrade to Pro'
     },
