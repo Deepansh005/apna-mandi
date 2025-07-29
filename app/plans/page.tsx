@@ -39,6 +39,7 @@ const plans = [
     description: 'For growing businesses looking to scale their reach.',
     features: [
       'Unlimited product listings',
+      'Preset Weekly Oders',
       'Lower transaction fees',
       'Featured "Best Seller" tags',
       'priority in delivery queue',
@@ -59,6 +60,7 @@ const plans = [
     description: 'The ultimate package for market leaders.',
     features: [
       'All Pro features',
+      'Preset Monthly Oders',
       'Zero transaction fees',
       'Personalized delivery partner',
       'Early access to new features',
